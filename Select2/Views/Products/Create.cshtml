@@ -1,0 +1,110 @@
+﻿@model Select2.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $('#CategoryId').select2({
+                placeholder: "Select...",
+                allowClear: true,
+                minimumInputLength: 2,
+                dropdownAutoWidth: true,
+                ajax: {
+                    url: '/Products/GetDD',
+                    type: 'GET',
+                    dataType: 'json',
+                    delay: 250, // Delay between input before starting the search
+                    data: function (params) {
+                        return {
+                            searchTerm: params.term || '',
+                            page: params.page || 1,
+                            pageSize: 10
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // Set the `page` property to the next page number
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.map(item => ({
+                                id: item.id,
+                                text: item.name
+                            })),
+                            pagination: {
+                                more: data.length === 10 // If the results length equals the pageSize, there is more data to load
+                            }
+                        };
+                    },
+                    cache: true // Enable caching
+                },
+                escapeMarkup: function (markup) {
+                    return markup; // Prevent markup from being escaped
+                },
+                templateResult: function (data) {
+                    return data.text; // Customize how the option is displayed
+                },
+                templateSelection: function (data) {
+                    return data.text; // Customize how the selected option is displayed
+                }
+            }).on('select2:open', function () {
+                var searchBox = $(this).data('select2').dropdown.$search.get(0);
+                if (searchBox) {
+                    searchBox.focus();
+                }
+            });
+
+            // Apply custom height and width dynamically
+            $('#CategoryId').next('.select2-container').css({
+                'width': '100%',  // Full width of the parent container
+                'height': '100%'  // Adjust height to match your form
+            });
+
+            $('#CategoryId').next('.select2-container').find('.select2-selection').css({
+                'height': '50px',    // Set height for the selection part
+                'line-height': '100%' // Align text vertically
+            });
+        });
+    </script>
+}
