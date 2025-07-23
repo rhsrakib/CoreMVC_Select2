@@ -9,6 +9,10 @@
         "js/select2.min.js",
         "css/select2.min.css"
       ]
+    },
+    {
+      "library": "choices.js@11.1.0",
+      "destination": "wwwroot/choices.js/"
     }
   ]
 }

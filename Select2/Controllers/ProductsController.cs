@@ -68,26 +68,6 @@ namespace Select2.Controllers
             return View(product);
         }
 
-        public async Task<JsonResult> GetDD(string searchTerm, int page = 1, int pageSize = 10)
-        {
-            var query = _context.Categories.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                query = query.Where(x => x.Name.Contains(searchTerm));
-            }
-
-            // Get the paginated results
-            var result = await query.Skip((page - 1) * pageSize)
-                                          .Take(pageSize)
-                                          .Select(x => new Category
-                                          {
-                                              Id = x.Id,
-                                              Name = x.Name
-                                          }).ToListAsync();
-
-            return Json(result);
-        }
 
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)

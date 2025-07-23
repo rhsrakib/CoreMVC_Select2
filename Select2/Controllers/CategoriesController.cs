@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Select2.Models;
+using Select2.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Select2.Controllers
 {
@@ -151,6 +152,61 @@ namespace Select2.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDD(string searchTerm, int page = 1, int pageSize = 10)
+        {
+            var query = _context.Categories.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(x => x.Name.Contains(searchTerm));
+            }
+
+            // Get the paginated results
+            var result = await query.Skip((page - 1) * pageSize)
+                                          .Take(pageSize)
+                                          .Select(x => new Category
+                                          {
+                                              Id = x.Id,
+                                              Name = x.Name
+                                          }).ToListAsync();
+
+            return Json(result);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> SearchCategorys(string search, int page = 1, int pageSize = 10)
+        {
+            var query = _context.Categories.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(x => x.Name.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(x => x.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new CommonSelectVM
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                })
+                .ToListAsync();
+
+            var result = new PaginatedResult<CommonSelectVM>
+            {
+                Items = items,
+                HasMore = (page * pageSize) < totalCount
+            };
+
+            return Ok(result);
         }
     }
 }

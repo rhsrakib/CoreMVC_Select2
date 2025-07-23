@@ -1,3 +1,15 @@
+wwwroot\choices.js\base.css
+wwwroot\choices.js\base.min.css
+wwwroot\choices.js\choices.css
+wwwroot\choices.js\choices.js
+wwwroot\choices.js\choices.min.css
+wwwroot\choices.js\choices.min.js
+wwwroot\choices.js\choices.search-basic.js
+wwwroot\choices.js\choices.search-basic.min.js
+wwwroot\choices.js\choices.search-kmp.js
+wwwroot\choices.js\choices.search-kmp.min.js
+wwwroot\choices.js\choices.search-prefix.js
+wwwroot\choices.js\choices.search-prefix.min.js
 wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\js\site.js

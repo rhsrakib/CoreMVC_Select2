@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Select2\\Select2\\Select2.csproj": {}
+    "E:\\My Projects\\CoreMVC_Select2\\Select2\\Select2.csproj": {}
   },
   "projects": {
-    "E:\\Select2\\Select2\\Select2.csproj": {
+    "E:\\My Projects\\CoreMVC_Select2\\Select2\\Select2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Select2\\Select2\\Select2.csproj",
+        "projectUniqueName": "E:\\My Projects\\CoreMVC_Select2\\Select2\\Select2.csproj",
         "projectName": "Select2",
-        "projectPath": "E:\\Select2\\Select2\\Select2.csproj",
+        "projectPath": "E:\\My Projects\\CoreMVC_Select2\\Select2\\Select2.csproj",
         "packagesPath": "C:\\Users\\shago\\.nuget\\packages\\",
-        "outputPath": "E:\\Select2\\Select2\\obj\\",
+        "outputPath": "E:\\My Projects\\CoreMVC_Select2\\Select2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -95,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

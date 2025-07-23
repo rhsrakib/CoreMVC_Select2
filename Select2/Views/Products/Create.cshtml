@@ -16,6 +16,17 @@
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control"></select>
             </div>
+
+            <div class="form-group">
+                <label for="CategoryIdChoice" class="control-label">Category (Choice Initial)</label>
+                <select id="CategoryIdChoice" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="CategoryIdChoiceDelay" class="control-label">Category (Choice Delay)</label>
+                <select id="CategoryIdChoiceDelay" class="form-control"></select>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -45,14 +56,15 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
+		// #region Select2
         $(document).ready(function () {
             $('#CategoryId').select2({
                 placeholder: "Select...",
                 allowClear: true,
-                minimumInputLength: 2,
+                minimumInputLength: 3,
                 dropdownAutoWidth: true,
                 ajax: {
-                    url: '/Products/GetDD',
+                    url: '/Categories/GetDD',
                     type: 'GET',
                     dataType: 'json',
                     delay: 250, // Delay between input before starting the search
@@ -106,5 +118,122 @@
                 'line-height': '100%' // Align text vertically
             });
         });
+        // #endregion
+
+
+        // #region Choices Init
+            document.addEventListener('DOMContentLoaded', function () {
+            const selectEl = document.getElementById('CategoryIdChoice');
+            let currentSearch = '';
+            let loading = false;
+
+            const choices = new Choices(selectEl, {
+                searchEnabled: true,
+                placeholder: true,
+                placeholderValue: 'Select Category...',
+                searchPlaceholderValue: 'Type to search...',
+                noChoicesText: 'Type 3 or more characters...',
+                searchResultLimit: 10,
+                shouldSort: false,
+                duplicateItemsAllowed: false,
+                loadingText: 'Loading...',
+                itemSelectText: '',
+                removeItemButton: true
+            });
+
+            // Fetch data from server
+            async function fetchOptions(search) {
+                loading = true;
+                try {
+                    const res = await fetch(`/Categories/SearchCategorys?search=${encodeURIComponent(search)}&page=1&pageSize=10`);
+                    const data = await res.json();
+                    return data;
+                } catch (error) {
+                    console.error("Error fetching Categorys:", error);
+                    return { items: [] };
+                } finally {
+                    loading = false;
+                }
+            }
+
+            // Triggered when user types
+            selectEl.addEventListener('search', async function (e) {
+                const searchTerm = e.detail.value;
+
+                if (searchTerm.length < 3) {
+                    choices.clearChoices();
+                    return;
+                }
+
+                currentSearch = searchTerm;
+
+                const data = await fetchOptions(currentSearch);
+                choices.clearChoices();
+                choices.setChoices(data.items, 'id', 'name', true);
+            });
+        });
+        // #endregion
+
+
+        // #region Choices Init
+            document.addEventListener('DOMContentLoaded', function () {
+            const selectEl = document.getElementById('CategoryIdChoiceDelay');
+            let debounceTimer;
+            let loading = false;
+            let hasInteracted = false;
+
+            const choices = new Choices(selectEl, {
+                searchEnabled: true,
+                placeholder: true,
+                placeholderValue: 'Select Category...',
+                searchPlaceholderValue: 'Type to search...',
+                noChoicesText: 'Type 3 or more characters...',
+                searchResultLimit: 10,
+                shouldSort: false,
+                duplicateItemsAllowed: false,
+                loadingText: 'Loading...',
+                itemSelectText: '',
+                removeItemButton: true
+            });
+
+            // Fetch data from server
+            async function fetchOptions(search) {
+                loading = true;
+                try {
+                    const res = await fetch(`/Categories/SearchCategorys?search=${encodeURIComponent(search)}&page=1&pageSize=10`);
+                    const data = await res.json();
+                    return data;
+                } catch (error) {
+                    console.error("Error fetching Categorys:", error);
+                    return { items: [] };
+                } finally {
+                    loading = false;
+                }
+            }
+
+            // Handle debounce on search
+            selectEl.addEventListener('search', function (e) {
+                const searchTerm = e.detail.value;
+
+                // Wait until user really types
+                if (!hasInteracted) {
+                    hasInteracted = true;
+                }
+
+                clearTimeout(debounceTimer);
+
+                if (!hasInteracted || searchTerm.length < 3) {
+                    choices.clearChoices();
+                    return;
+                }
+
+                debounceTimer = setTimeout(async () => {
+                    const data = await fetchOptions(searchTerm);
+                    choices.clearChoices();
+                    choices.setChoices(data.items, 'id', 'name', true);
+                }, 1000); // Wait 1 second after pause
+            });
+        });
+        // #endregion
     </script>
 }

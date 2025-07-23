@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Select2.styles.css" asp-append-version="true" />
 	<link href="~/select2/css/select2.min.css" rel="stylesheet" />
+	<link href="~/choices.js/choices.min.css" rel="stylesheet" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Products" asp-action="Index">Select2</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Products" asp-action="Create">Select</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -46,6 +47,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 	<script src="~/select2/js/select2.min.js"></script>
+	<script src="~/choices.js/choices.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
